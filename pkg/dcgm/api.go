@@ -64,6 +64,10 @@ func GetAllDeviceCount() (uint, error) {
 	return getAllDeviceCount()
 }
 
+func GetHostEngineBuildInfo() (string, error) {
+	return getHostEngineBuildInfo()
+}
+
 func GetEntityGroupEntities(entityGroup Field_Entity_Group) ([]uint, error) {
 	return getEntityGroupEntities(entityGroup)
 }

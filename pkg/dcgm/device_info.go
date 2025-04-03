@@ -40,6 +40,19 @@ type Device struct {
 	CPUAffinity   string
 }
 
+func getHostEngineBuildInfo() (string, error) {
+	var versionInfo C.dcgmVersionInfo_v2
+	versionInfo.version = makeVersion2(unsafe.Sizeof(versionInfo))
+
+	result := C.dcgmHostengineVersionInfo(handle.handle, &versionInfo)
+	if err := errorString(result); err != nil {
+		return "", fmt.Errorf("error getting hostengine version: %s", err)
+	}
+
+	versionStr := C.GoString(&versionInfo.rawBuildInfoString[0]) // no need for stringPtr
+	return versionStr, nil
+}
+
 // getAllDeviceCount counts all GPUs on the system
 func getAllDeviceCount() (gpuCount uint, err error) {
 	var gpuIdList [C.DCGM_MAX_NUM_DEVICES]C.uint
